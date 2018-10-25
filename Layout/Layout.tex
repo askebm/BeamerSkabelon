@@ -2,7 +2,7 @@
 %================= Allow the use of \includesvg, via inkscape===============
 %===========================================================================
 %\usepackage{calc}
-\usepackage{import}
+%\usepackage{import}
 
 \newcommand{\executeiffilenewer}[3]{%
 \ifnum\pdfstrcmp{\pdffilemoddate{#1}}%
@@ -22,16 +22,17 @@
 %===========================================================================
 %=================== Setup fancy page counter ==============================
 %===========================================================================
-
-
 \usepackage{tikz}
-\definecolor{color1}{RGB}{173,216,230}
-\definecolor{color2}{RGB}{255,140,0}
+\definecolor{color1}{RGB}{193,193,204}
+\definecolor{color2}{RGB}{255,255,255}
+\definecolor{color3}{RGB}{83,96,109}
 
 \newcounter{totavalue}
 
 \def\aux{1}
-\def\radius{20pt}
+\def\radius{19pt}
+\def\thickness{2pt}
+\def\logoscale{26pt}
 
 \newcommand\circcounteri{%
 \ifnum\inserttotalframenumber<2\relax
@@ -40,22 +41,24 @@
 \fi%
 \pgfmathsetmacro{\aux}{360/\thetotavalue}%
 \begin{tikzpicture}[overlay]
-  \fill[color1] 
-    (0,0) -- (0:\radius) arc  (0:360:\radius) -- cycle;
-  \fill[color2] 
-    (0,0) -- (90:\radius) arc  (90:90-\insertframenumber*\aux:\radius) -- cycle;
-  \fill[color1] 
-    (0,0) -- (0:16pt) arc  (0:360:16pt) -- cycle;
-    \node[inner sep=0pt] at (0,0) 
-	    {\includegraphics[width=30pt]{SDU_BLACK.pdf}};
-  \fill[color1]
-	  (\radius,0) circle[radius=7pt];
-  \node[font=\color{white}] at (\radius,0) {\strut\insertframenumber};
+	\fill[color1]
+		circle (\radius+1pt);
+	\fill[color2]
+		circle (\radius-1pt-\thickness);
+	\fill[black] 
+		(0:\radius)
+		arc  (0:\insertframenumber*\aux:\radius)
+		arc  (\insertframenumber*\aux:180+\insertframenumber*\aux:\thickness/2)
+		arc  (\insertframenumber*\aux:0:\radius-\thickness) -- cycle;
+	\node[inner sep=0pt] at (0,0) 
+		{\includegraphics[width=\logoscale]{Layout/SDU_BLACK.pdf}};
+	\fill[color1]
+		(0:\radius) circle(5pt);
+	\fill[color2]
+		(0:\radius) circle(4pt);
+	\node[font=\color{color3}] at (\radius,0) {\insertframenumber};
 \end{tikzpicture}%
 }
-
-\addtobeamertemplate{headline}{}{\vskip1cm\hfill\circcounteri\hspace*{1cm}}
-% \addtobeamertemplate{headline}{}{\vskip1cm\hspace*{15pt}smash\circcounteri\hfill}
-
+\addtobeamertemplate{headline}{}{\vskip22pt\hfill\circcounteri\hspace*{25pt}}
 
 
