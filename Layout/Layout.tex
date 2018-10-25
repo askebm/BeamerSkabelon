@@ -1,0 +1,61 @@
+%===========================================================================
+%================= Allow the use of \includesvg, via inkscape===============
+%===========================================================================
+%\usepackage{calc}
+\usepackage{import}
+
+\newcommand{\executeiffilenewer}[3]{%
+\ifnum\pdfstrcmp{\pdffilemoddate{#1}}%
+{\pdffilemoddate{#2}}>0%
+{\immediate\write18{#3}}\fi%
+}
+\newcommand{\includesvg}[2][./]{%
+\executeiffilenewer{#1#2.svg}{#1#2.pdf}
+{inkscape -z -D --file=#1#2.svg --export-pdf=#1#2.pdf --export-latex}
+\import{#1}{#2.pdf_tex}
+}
+% ex. \includesvg[images/]{image} Trailing slash er vigtigt for stien
+% Kilde: http://ctan.math.utah.edu/ctan/tex-archive/info/svg-inkscape/InkscapePDFLaTeX.pdf
+% Størrelse kan blive sat med \def\svgwidth{<size>} eller \def\svgscale{<scale>} umiddelbart
+% før \includesvg
+
+%===========================================================================
+%=================== Setup fancy page counter ==============================
+%===========================================================================
+
+
+\usepackage{tikz}
+\definecolor{color1}{RGB}{173,216,230}
+\definecolor{color2}{RGB}{255,140,0}
+
+\newcounter{totavalue}
+
+\def\aux{1}
+\def\radius{20pt}
+
+\newcommand\circcounteri{%
+\ifnum\inserttotalframenumber<2\relax
+\else
+  \setcounter{totavalue}{\inserttotalframenumber}%
+\fi%
+\pgfmathsetmacro{\aux}{360/\thetotavalue}%
+\begin{tikzpicture}[overlay]
+  \fill[color1] 
+    (0,0) -- (0:\radius) arc  (0:360:\radius) -- cycle;
+  \fill[color2] 
+    (0,0) -- (90:\radius) arc  (90:90-\insertframenumber*\aux:\radius) -- cycle;
+  \fill[color1] 
+    (0,0) -- (0:16pt) arc  (0:360:16pt) -- cycle;
+    \node[inner sep=0pt] at (0,0) 
+	    {\includegraphics[width=30pt]{SDU_BLACK.pdf}};
+  \fill[color1]
+	  (\radius,0) circle[radius=7pt];
+  \node[font=\color{white}] at (\radius,0) {\strut\insertframenumber};
+\end{tikzpicture}%
+}
+
+\addtobeamertemplate{headline}{}{\vskip1cm\hfill\circcounteri\hspace*{1cm}}
+% \addtobeamertemplate{headline}{}{\vskip1cm\hspace*{15pt}smash\circcounteri\hfill}
+
+
+
