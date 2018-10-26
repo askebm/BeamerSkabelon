@@ -59,6 +59,16 @@
 	\node[font=\color{color3}] at (\radius,0) {\insertframenumber};
 \end{tikzpicture}%
 }
-\addtobeamertemplate{headline}{}{\vskip22pt\hfill\circcounteri\hspace*{25pt}}
+\setbeamertemplate{headline}{%
+	\begin{tikzpicture}
+		\node[inner sep=0pt] at (0,0)
+			{\includegraphics[width=\textwidth]{Layout/TekniskFakultet2edit.png}};
+		\node[inner sep=0pt] at (7cm,7pt)
+			{\circcounteri};
+	\end{tikzpicture}%
+%\includegraphics[width=\textwidth]{Layout/TekniskFakultet2edit.png}
+%\hspace{30pt}\circcounteri}
+}
+%\addtobeamertemplate{headline}{}{\vskip22pt\hfill\circcounteri\hspace*{25pt}}
 
 
