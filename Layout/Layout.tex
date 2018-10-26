@@ -1,28 +1,8 @@
 %===========================================================================
-%================= Allow the use of \includesvg, via inkscape===============
-%===========================================================================
-%\usepackage{calc}
-%\usepackage{import}
-
-\newcommand{\executeiffilenewer}[3]{%
-\ifnum\pdfstrcmp{\pdffilemoddate{#1}}%
-{\pdffilemoddate{#2}}>0%
-{\immediate\write18{#3}}\fi%
-}
-\newcommand{\includesvg}[2][./]{%
-\executeiffilenewer{#1#2.svg}{#1#2.pdf}
-{inkscape -z -D --file=#1#2.svg --export-pdf=#1#2.pdf --export-latex}
-\import{#1}{#2.pdf_tex}
-}
-% ex. \includesvg[images/]{image} Trailing slash er vigtigt for stien
-% Kilde: http://ctan.math.utah.edu/ctan/tex-archive/info/svg-inkscape/InkscapePDFLaTeX.pdf
-% Størrelse kan blive sat med \def\svgwidth{<size>} eller \def\svgscale{<scale>} umiddelbart
-% før \includesvg
-
-%===========================================================================
 %=================== Setup fancy page counter ==============================
 %===========================================================================
 \usepackage{tikz}
+
 \definecolor{color1}{RGB}{193,193,204}
 \definecolor{color2}{RGB}{255,255,255}
 \definecolor{color3}{RGB}{83,96,109}
@@ -35,9 +15,9 @@
 \def\logoscale{26pt}
 
 \newcommand\circcounteri{%
-\ifnum\inserttotalframenumber<2\relax
+\ifnum\insertdocumentendpage<2\relax
 \else
-  \setcounter{totavalue}{\inserttotalframenumber}%
+  \setcounter{totavalue}{\insertdocumentendpage}%
 \fi%
 \pgfmathsetmacro{\aux}{360/\thetotavalue}%
 \begin{tikzpicture}[overlay]
@@ -47,28 +27,29 @@
 		circle (\radius-1pt-\thickness);
 	\fill[black] 
 		(0:\radius)
-		arc  (0:\insertframenumber*\aux:\radius)
-		arc  (\insertframenumber*\aux:180+\insertframenumber*\aux:\thickness/2)
-		arc  (\insertframenumber*\aux:0:\radius-\thickness) -- cycle;
+		arc  (0:\insertpagenumber*\aux:\radius)
+		arc  (\insertpagenumber*\aux:180+\insertpagenumber*\aux:\thickness/2)
+		arc  (\insertpagenumber*\aux:0:\radius-\thickness) -- cycle;
 	\node[inner sep=0pt] at (0,0) 
 		{\includegraphics[width=\logoscale]{Layout/SDU_BLACK.pdf}};
 	\fill[color1]
 		(0:\radius) circle(5pt);
 	\fill[color2]
 		(0:\radius) circle(4pt);
-	\node[font=\color{color3}] at (\radius,0) {\insertframenumber};
+	\node[font=\color{color3}] at (\radius,0) {\insertpagenumber};
 \end{tikzpicture}%
 }
+
 \setbeamertemplate{headline}{%
-	\begin{tikzpicture}
+	\begin{tikzpicture}[node distance=.5cm]
 		\node[inner sep=0pt] at (0,0)
 			{\includegraphics[width=\textwidth]{Layout/TekniskFakultet2edit.png}};
-		\node[inner sep=0pt] at (7cm,7pt)
+		\node[inner sep=0pt] at (7cm+2pt,0)
 			{\circcounteri};
+		\node[font=\color{white}, align=left, anchor=north west] (section) at (-7.5cm,15pt) 
+			{%
+				\huge{\insertsection}\\
+				\large{\insertsubsection}
+			};
 	\end{tikzpicture}%
-%\includegraphics[width=\textwidth]{Layout/TekniskFakultet2edit.png}
-%\hspace{30pt}\circcounteri}
 }
-%\addtobeamertemplate{headline}{}{\vskip22pt\hfill\circcounteri\hspace*{25pt}}
-
-
