@@ -1,7 +1,20 @@
 %===========================================================================
-%=================== Setup fancy page counter ==============================
+%============== Userpackages ===============================================
+%===========================================================================
+
+\usepackage[english, danish]{babel}
+
+%Denne package ændre sproget til dansk så indholdfortegnelse og den slags er dansk. Hvis man fjerner "[danish]" vil dokumentet bare være på engelsk. Man kan godt kommenterer hele usepackage ud, men det anbefaldes at man kun fjerner "[danish]".
+
+%===========================================================================
+\usepackage[utf8]{inputenc}
+%Denne package gør at man kan printe "æ", "ø" & "å".
+
+%===========================================================================
+%======================== Setup theme ======================================
 %===========================================================================
 \usepackage{tikz}
+\usepackage{graphicx}
 
 \definecolor{color1}{RGB}{193,193,204}
 \definecolor{color2}{RGB}{255,255,255}
@@ -52,4 +65,21 @@
 				\large{\insertsubsection}
 			};
 	\end{tikzpicture}%
+}
+\setbeamertemplate{title page}{%
+	\begin{center}
+		\begin{tikzpicture}[overlay]
+		\node[inner sep=0pt] at (0,-23pt)
+			{\includegraphics[width=\paperwidth]{Layout/TekniskFakultet5edit.png}};
+		\node[rounded corners, font=\color{white}, fill=black!97, align=center] at (0,-2cm)
+%			[minimum width=5cm, minimum height=3cm]
+			[inner sep=10pt]
+			{%
+				\huge{\inserttitle}\\
+				\insertsubtitle\\
+				\insertauthor\\
+				\insertinstitute
+			};
+		\end{tikzpicture}
+	\end{center}
 }
